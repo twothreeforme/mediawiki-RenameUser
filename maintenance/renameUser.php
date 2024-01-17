@@ -73,7 +73,7 @@ class RenameUser extends Maintenance {
 			// $user->getName(),
 			$this->getOption( 'oldname' ),
 			$this->getOption( 'newname' ),
-			$user->getId(),
+			$this->getOption( 'userid' ),
 			$performer,
 			[
 				'reason' => $this->getOption( 'reason' )
