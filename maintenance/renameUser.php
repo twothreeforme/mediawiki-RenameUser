@@ -37,7 +37,7 @@ class RenameUser extends Maintenance {
 		$this->requireExtension( 'Renameuser' );
 
 		$this->addDescription( 'Rename an user' );
-		$this->addOption( 'oldname', 'Current username of the to-be-renamed user', true, true );
+		$this->addOption( 'oldname', 'Current username of the to-be-renamed user', false, true );
 		$this->addOption( 'newname', 'New username of the to-be-renamed user', true, true );
 		$this->addOption( 'userid', 'UserID for username', true, true );
 		$this->addOption( 'performer', 'Performer of the rename action', false, true );
@@ -53,6 +53,10 @@ class RenameUser extends Maintenance {
 		// 	$this->fatalError( 'The user does not exist' );
 		// }
 		
+		$user = User::newFromId( $this->getOption( 'userid' ) );
+		if ( !$user  ) {
+			$this->fatalError( 'The userid does not exist' );
+		}
 
 		if ( User::newFromName( $this->getOption( 'newname' ) )->getId() > 0 ) {
 			$this->fatalError( 'New username must be free' );
@@ -70,10 +74,11 @@ class RenameUser extends Maintenance {
 
 		'@phan-var User $performer';
 		$renameJob = new RenameuserSQL(
-			// $user->getName(),
-			$this->getOption( 'oldname' ),
+			$user->getName(),
+			//$this->getOption( 'oldname' ),
 			$this->getOption( 'newname' ),
-			$this->getOption( 'userid' ),
+			//$this->getOption( 'userid' ),
+			$user->getID(),
 			$performer,
 			[
 				'reason' => $this->getOption( 'reason' )
