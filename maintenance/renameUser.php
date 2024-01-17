@@ -47,10 +47,11 @@ class RenameUser extends Maintenance {
 	 * @inheritDoc
 	 */
 	public function execute() {
-		$user = User::newFromName( $this->getOption( 'oldname' ) );
-		if ( $user->getId() === 0 ) {
-			$this->fatalError( 'The user does not exist' );
-		}
+		// $user = User::newFromName( $this->getOption( 'oldname' ) );
+		// if ( $user->getId() === 0 ) {
+		// 	$this->fatalError( 'The user does not exist' );
+		// }
+		
 
 		if ( User::newFromName( $this->getOption( 'newname' ) )->getId() > 0 ) {
 			$this->fatalError( 'New username must be free' );
@@ -68,7 +69,8 @@ class RenameUser extends Maintenance {
 
 		'@phan-var User $performer';
 		$renameJob = new RenameuserSQL(
-			$user->getName(),
+			// $user->getName(),
+			$this->getOption( 'oldname' ),
 			$this->getOption( 'newname' ),
 			$user->getId(),
 			$performer,
